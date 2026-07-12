@@ -10,8 +10,12 @@ export default function Home() {
   return (
     <main id="top" className="flex-1">
       {/* Hero */}
-      <section className="relative bg-ink text-cream">
-        <div className="mx-auto max-w-6xl px-5 pb-16 pt-20 md:px-10 md:pb-24 md:pt-28">
+      <section
+        className="relative flex h-screen items-center overflow-hidden bg-ink bg-[url('/images/london-hero-mobile.jpg')] bg-cover bg-center bg-no-repeat text-cream md:bg-[url('/images/london-hero-desktop.jpg')]"
+      >
+        <div className="absolute inset-0 bg-ink/65" />
+
+        <div className="relative mx-auto w-full max-w-6xl px-5 md:px-10">
           <Eyebrow>Independent Jewellery Authentication · Consultation</Eyebrow>
           <h1 className="mt-8 font-display text-5xl leading-[1.05] tracking-tight md:text-7xl">
             Expertise.
@@ -27,39 +31,40 @@ export default function Home() {
             <Button>Begin an Assessment</Button>
           </div>
         </div>
-
-        {/* hero image */}
-        <ImagePlate
-          caption="Independent · Experienced"
-          className="h-72 w-full md:h-[420px]"
-        />
       </section>
 
       {/* About */}
       <section className="mx-auto max-w-6xl px-5 py-16 md:px-10 md:py-28">
-        <SectionLabel>Independent · Experienced</SectionLabel>
-        <h2 className="mt-6 max-w-3xl font-display text-3xl leading-tight md:text-5xl">
-          An independent consultancy for branded fine jewellery.
-        </h2>
-        <div className="mt-8 max-w-2xl space-y-5 font-serif text-lg leading-relaxed text-ink-soft md:text-xl">
-          <p>
-            London Jewellery Consultant is an independent consultancy for branded
-            fine jewellery — Cartier, Van Cleef &amp; Arpels, Tiffany &amp; Co.,
-            Bvlgari, Chopard and Chanel.
-          </p>
-          <p>
-            We provide written guidance for buyers, sellers, insurers and private
-            clients, who are not affiliated with any of the maisons and retailers.
-          </p>
-        </div>
+        <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
+          <div>
+            <SectionLabel>Independent · Experienced</SectionLabel>
+            <h2 className="mt-6 max-w-3xl font-display text-3xl leading-tight md:text-5xl">
+              An independent consultancy for branded fine jewellery.
+            </h2>
+            <div className="mt-8 max-w-2xl space-y-5 font-serif text-lg leading-relaxed text-ink-soft md:text-xl">
+              <p>
+                London Jewellery Consultant is an independent consultancy for
+                branded fine jewellery — Cartier, Van Cleef &amp; Arpels, Tiffany
+                &amp; Co., Bvlgari, Chopard and Chanel.
+              </p>
+              <p>
+                We provide written guidance for buyers, sellers, insurers and
+                private clients, who are not affiliated with any of the maisons
+                and retailers.
+              </p>
+            </div>
 
-        <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-line pt-8">
-          {MAISONS.map((m) => (
-            <li key={m} className="font-display text-lg text-ink/80 md:text-xl">
-              {m}
-            </li>
-          ))}
-        </ul>
+            <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-line pt-8">
+              {MAISONS.map((m) => (
+                <li key={m} className="font-display text-lg text-ink/80 md:text-xl">
+                  {m}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <ImagePlate src="/images/london-img.jpg" className="h-screen w-full md:h-full" />
+        </div>
       </section>
 
       {/* Selective approach + pull quote */}

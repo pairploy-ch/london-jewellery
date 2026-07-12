@@ -44,32 +44,45 @@ export function Button({
   );
 }
 
-/* a tasteful gradient stand-in for editorial photography */
+/* editorial photography plate — falls back to a tasteful gradient when no src is given */
 export function ImagePlate({
   caption,
+  src,
   className = "",
 }: {
   caption?: string;
+  src?: string;
   className?: string;
 }) {
   return (
     <div
-      className={`relative overflow-hidden ${className}`}
+      className={`relative overflow-hidden ${
+        src ? "bg-cover bg-center bg-no-repeat md:bg-contain" : ""
+      } ${className}`}
       style={{
-        backgroundImage:
-          "radial-gradient(120% 90% at 25% 15%, #4a3f33 0%, #2b2218 45%, #15100b 100%)",
+        backgroundImage: src
+          ? `url(${src})`
+          : "radial-gradient(120% 90% at 25% 15%, #4a3f33 0%, #2b2218 45%, #15100b 100%)",
       }}
     >
-      <div
-        className="absolute inset-0 opacity-40"
-        style={{
-          backgroundImage:
-            "radial-gradient(40% 35% at 70% 75%, rgba(196,168,119,0.55) 0%, rgba(196,168,119,0) 70%)",
-        }}
-      />
-      <div className="absolute inset-0 ring-1 ring-inset ring-white/10" />
+      {!src ? (
+        <>
+          <div
+            className="absolute inset-0 opacity-40"
+            style={{
+              backgroundImage:
+                "radial-gradient(40% 35% at 70% 75%, rgba(196,168,119,0.55) 0%, rgba(196,168,119,0) 70%)",
+            }}
+          />
+          <div className="absolute inset-0 ring-1 ring-inset ring-white/10" />
+        </>
+      ) : null}
       {caption ? (
-        <span className="eyebrow absolute bottom-4 left-4 text-cream/60">
+        <span
+          className={`eyebrow absolute bottom-4 left-4 ${
+            src ? "text-ink/60" : "text-cream/60"
+          }`}
+        >
           {caption}
         </span>
       ) : null}

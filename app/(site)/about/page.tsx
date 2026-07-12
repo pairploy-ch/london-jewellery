@@ -41,12 +41,11 @@ export default function AboutPage() {
       <section className="mx-auto max-w-6xl px-5 py-16 md:px-10 md:py-28">
         <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
           <ImagePlate
-            caption="London, UK"
-            className="h-64 w-full md:h-[380px]"
+            src="/images/london-img.jpg"
+            className="h-screen w-full md:h-[380px]"
           />
           <div>
-            <SectionLabel>Who We Are</SectionLabel>
-            <h2 className="mt-6 font-display text-3xl leading-tight md:text-4xl">
+            <h2 className="font-display text-3xl leading-tight md:text-4xl">
               An independent consultancy for branded fine jewellery.
             </h2>
             <div className="mt-8 space-y-5 font-serif text-lg leading-relaxed text-ink-soft md:text-xl">
