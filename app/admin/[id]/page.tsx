@@ -7,6 +7,7 @@ import {
   PHOTO_BUCKET,
   type Submission,
 } from "../../lib/supabase/config";
+import { ReportForm } from "./report-form";
 
 export const metadata: Metadata = {
   title: "Submission — Admin",
@@ -120,6 +121,19 @@ export default async function SubmissionPage({
             ))}
           </div>
         )}
+
+        <h2 className="mt-12 font-display text-2xl md:text-3xl">
+          Assessment Report
+        </h2>
+        <ReportForm
+          submissionId={s.id}
+          defaults={{
+            referenceNumber: s.id.slice(0, 8).toUpperCase(),
+            brand: s.brand ?? "",
+            itemType: s.item_type ?? "",
+          }}
+          reportSentAt={s.report_sent_at}
+        />
       </section>
     </main>
   );

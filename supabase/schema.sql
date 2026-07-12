@@ -24,6 +24,10 @@ create table if not exists public.submissions (
 create index if not exists submissions_created_at_idx
   on public.submissions (created_at desc);
 
+-- 1b) Assessment report fields (added for the PDF report / send-to-client flow)
+alter table public.submissions add column if not exists report jsonb;
+alter table public.submissions add column if not exists report_sent_at timestamptz;
+
 -- 2) Row Level Security ------------------------------------------------------
 -- Public visitors never read/write directly. Inserts + uploads happen on the
 -- server with the service-role key (which bypasses RLS). Signed-in admins may

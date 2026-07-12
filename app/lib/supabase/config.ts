@@ -18,6 +18,21 @@ export function isSupabaseAdminConfigured(): boolean {
   );
 }
 
+export type ReportResult = "verified" | "unable" | "more_info";
+
+export type ReportData = {
+  referenceNumber: string;
+  dateOfAssessment: string;
+  brand: string;
+  itemType: string;
+  collection: string;
+  material: string;
+  serial: string;
+  additionalDetails: string;
+  result: ReportResult;
+  notes: string;
+};
+
 export type Submission = {
   id: string;
   created_at: string;
@@ -35,4 +50,6 @@ export type Submission = {
   currency: string | null;
   photo_paths: string[];
   status: string;
+  report: ReportData | null;
+  report_sent_at: string | null;
 };
