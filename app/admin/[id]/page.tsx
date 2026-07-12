@@ -127,6 +127,7 @@ export default async function SubmissionPage({
         </h2>
         <ReportForm
           submissionId={s.id}
+          clientEmail={s.email}
           defaults={{
             referenceNumber: s.id.slice(0, 8).toUpperCase(),
             brand: s.brand ?? "",

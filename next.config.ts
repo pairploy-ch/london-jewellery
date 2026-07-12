@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  // @sparticuz/chromium ships a binary asset that Next's file tracing can't
+  // resolve on its own — keep it (and puppeteer-core) external so it's
+  // required from node_modules as-is at runtime.
+  serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
 };
 
 export default nextConfig;

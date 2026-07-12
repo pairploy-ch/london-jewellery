@@ -20,10 +20,12 @@ function todayISO() {
 
 export function ReportForm({
   submissionId,
+  clientEmail,
   defaults,
   reportSentAt,
 }: {
   submissionId: string;
+  clientEmail: string;
   defaults: {
     referenceNumber: string;
     brand: string;
@@ -43,6 +45,7 @@ export function ReportForm({
     result: "verified",
     notes: "",
   });
+  const [confirming, setConfirming] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sentAt, setSentAt] = useState(reportSentAt);
@@ -50,8 +53,13 @@ export function ReportForm({
   const set = (key: keyof ReportData) => (v: string) =>
     setFields((f) => ({ ...f, [key]: v }));
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleReviewSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setError(null);
+    setConfirming(true);
+  }
+
+  async function handleConfirmSend() {
     setSubmitting(true);
     setError(null);
     try {
@@ -63,6 +71,7 @@ export function ReportForm({
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error ?? "generate_failed");
       setSentAt(new Date().toISOString());
+      setConfirming(false);
     } catch {
       setError("Something went wrong generating or sending the report. Please try again.");
     } finally {
@@ -70,9 +79,58 @@ export function ReportForm({
     }
   }
 
+  if (confirming) {
+    const resultLabel = RESULT_OPTIONS.find((o) => o.value === fields.result)?.label;
+    return (
+      <div className="mt-6 border border-line bg-cream p-6 md:p-8">
+        <h3 className="font-display text-2xl">Confirm &amp; send report</h3>
+        <p className="mt-4 font-serif text-lg text-ink-soft">
+          This will generate a PDF report and email it to{" "}
+          <span className="text-ink">{clientEmail}</span>. Please confirm the
+          details below before sending.
+        </p>
+
+        <div className="mt-6 space-y-3 border-t border-line pt-6 font-serif text-base text-ink-soft">
+          <p><span className="eyebrow text-ink/70">Reference — </span>{fields.referenceNumber}</p>
+          <p><span className="eyebrow text-ink/70">Date — </span>{fields.dateOfAssessment}</p>
+          <p><span className="eyebrow text-ink/70">Brand / Item — </span>{fields.brand} · {fields.itemType}</p>
+          <p><span className="eyebrow text-ink/70">Result — </span>{resultLabel}</p>
+          {fields.notes.trim() ? (
+            <p className="whitespace-pre-wrap">
+              <span className="eyebrow text-ink/70">Notes — </span>{fields.notes}
+            </p>
+          ) : null}
+        </div>
+
+        {error ? (
+          <p className="mt-4 font-serif text-base text-[#b3261e]">{error}</p>
+        ) : null}
+
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <button
+            type="button"
+            onClick={handleConfirmSend}
+            disabled={submitting}
+            className="eyebrow inline-flex items-center justify-center bg-gold px-8 py-4 text-cream transition-colors duration-300 hover:bg-gold-soft disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
+          >
+            {submitting ? "Generating & sending…" : `Send to ${clientEmail}`}
+          </button>
+          <button
+            type="button"
+            onClick={() => setConfirming(false)}
+            disabled={submitting}
+            className="eyebrow inline-flex items-center justify-center border border-line-dark px-8 py-4 text-ink transition-colors hover:bg-ink hover:text-cream disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            ← Back to edit
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleReviewSubmit}
       className="mt-6 border border-line bg-cream p-6 md:p-8"
     >
       {sentAt ? (
@@ -196,10 +254,9 @@ export function ReportForm({
 
       <button
         type="submit"
-        disabled={submitting}
-        className="eyebrow mt-8 inline-flex w-full items-center justify-center bg-gold px-8 py-4 text-cream transition-colors duration-300 hover:bg-gold-soft disabled:cursor-not-allowed disabled:bg-line disabled:text-muted sm:w-auto"
+        className="eyebrow mt-8 inline-flex w-full items-center justify-center bg-gold px-8 py-4 text-cream transition-colors duration-300 hover:bg-gold-soft sm:w-auto"
       >
-        {submitting ? "Generating & sending…" : "Generate & Send Report"}
+        Review &amp; Send Report
       </button>
     </form>
   );
