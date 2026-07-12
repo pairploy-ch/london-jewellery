@@ -32,7 +32,10 @@ export async function htmlToPdf(html: string): Promise<Buffer> {
   if (isServerless) {
     const chromium = (await import("@sparticuz/chromium")).default;
     executablePath = await chromium.executablePath();
-    args = chromium.args;
+    // @sparticuz/chromium ships the dedicated "chrome-headless-shell" binary,
+    // not the full browser — it must be launched with headless: "shell" or
+    // Puppeteer's newer full-browser headless handshake fails against it.
+    args = await puppeteer.defaultArgs({ args: chromium.args, headless: "shell" });
   } else {
     const local = localBrowserPath();
     if (!local) {
@@ -43,7 +46,11 @@ export async function htmlToPdf(html: string): Promise<Buffer> {
     executablePath = local;
   }
 
-  const browser = await puppeteer.launch({ executablePath, args, headless: true });
+  const browser = await puppeteer.launch({
+    executablePath,
+    args,
+    headless: isServerless ? "shell" : true,
+  });
   try {
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "load" });
