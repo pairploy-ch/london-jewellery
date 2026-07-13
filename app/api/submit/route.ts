@@ -5,8 +5,8 @@ import {
   PHOTO_BUCKET,
 } from "../../lib/supabase/config";
 import { getStripe, isStripeConfigured } from "../../lib/stripe";
-import { sendConfirmationEmail } from "../../lib/email";
 
+const MIN_PHOTOS = 5;
 const MAX_PHOTOS = 10;
 
 export async function POST(request: Request) {
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     .getAll("photos")
     .filter((f): f is File => f instanceof File && f.size > 0);
 
-  if (photos.length === 0 || photos.length > MAX_PHOTOS) {
+  if (photos.length < MIN_PHOTOS || photos.length > MAX_PHOTOS) {
     return NextResponse.json({ error: "invalid_photos" }, { status: 400 });
   }
 
@@ -64,6 +64,7 @@ export async function POST(request: Request) {
       address: field("address") || null,
       brand: field("brand") || null,
       item_type: field("itemType") || null,
+      metal: field("metal") || null,
       has_gemstones:
         hasGemstones === "yes" ? true : hasGemstones === "no" ? false : null,
       payment_intent_id: paymentIntentId || null,
@@ -96,13 +97,6 @@ export async function POST(request: Request) {
     .from("submissions")
     .update({ photo_paths: paths })
     .eq("id", row.id);
-
-  // Best-effort confirmation email (won't fail the submission).
-  await sendConfirmationEmail({
-    to: field("email"),
-    name: field("name"),
-    orderRef: row.id.slice(0, 8).toUpperCase(),
-  });
 
   return NextResponse.json({ ok: true, id: row.id });
 }

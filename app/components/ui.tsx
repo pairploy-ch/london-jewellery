@@ -114,9 +114,6 @@ export function CtaSection() {
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button>Begin an Assessment</Button>
-          <Button variant="outline" href="#enquiry">
-            Make an Enquiry
-          </Button>
         </div>
       </div>
     </section>

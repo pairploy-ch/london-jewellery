@@ -4,7 +4,7 @@ export const MAISONS = [
   "Tiffany & Co.",
   "Bvlgari",
   "Chopard",
-  "Chanel",
+  "Chanel (Fine Jewellery only)",
 ];
 
 export const STEPS = [
@@ -35,6 +35,15 @@ export const ITEM_TYPES = [
   "Watch",
   "Cufflinks",
   "Other",
+];
+
+export const METAL_TYPES = [
+  "18K White Gold",
+  "18K Yellow Gold",
+  "18K Rose Gold",
+  "Platinum",
+  "Silver",
+  "Not sure",
 ];
 
 /* the ten labelled photo slots shown in the upload step */
@@ -104,14 +113,11 @@ export const ASSESSMENT_FEATURES = [
 
 /* assessment fee — single source of truth for both the UI and the
    server-side PaymentIntent. Amount is in the currency's smallest unit
-   (pence for GBP). Adjust here to change the price. */
+   (cents for EUR). Adjust here to change the price. */
 export const ASSESSMENT_FEE = {
-  // Stripe requires the session total to convert to at least £0.30 (this
-  // account settles in GBP) — ฿10 only converts to ~£0.23 and gets rejected
-  // with "amount_too_small", so the test price is raised to ฿50 here.
-  amount: 5000, // ฿50.00 (test price) — THB is charged in satang, so 50 baht = 5000
-  currency: "thb",
-  label: "฿50",
+  amount: 6500, // €65.00 — EUR is charged in cents, so 65 euro = 6500
+  currency: "eur",
+  label: "€65",
 };
 
 /* steps shown in the assessment flow progress indicator */

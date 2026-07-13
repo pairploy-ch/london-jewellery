@@ -76,6 +76,7 @@ export default async function SubmissionPage({
           <DetailRow label="Address" value={s.address ?? ""} />
           <DetailRow label="Brand" value={s.brand ?? ""} />
           <DetailRow label="Item type" value={s.item_type ?? ""} />
+          <DetailRow label="Metal" value={s.metal ?? ""} />
           <DetailRow
             label="Diamonds / gemstones"
             value={

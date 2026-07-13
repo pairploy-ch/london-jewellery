@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
-import { MAISONS, ITEM_TYPES, ASSESSMENT_STEPS } from "./content";
+import { MAISONS, ITEM_TYPES, METAL_TYPES, ASSESSMENT_STEPS } from "./content";
 import { PaymentStep } from "./payment-step";
 import { PhotosStep, type SubmissionDetails } from "./photos-step";
 
@@ -14,6 +14,7 @@ type Fields = {
   address: string;
   brand: string;
   itemType: string;
+  metal: string;
   hasGemstones: "" | "yes" | "no";
 };
 
@@ -210,8 +211,8 @@ function StepDetails({
         />
         <SelectField
           label="Country"
-          optional
-          placeholder="Optional"
+          required
+          placeholder="Select a country"
           options={COUNTRIES}
           value={fields.country}
           onChange={set("country")}
@@ -238,6 +239,14 @@ function StepDetails({
           options={ITEM_TYPES}
           value={fields.itemType}
           onChange={set("itemType")}
+        />
+        <SelectField
+          label="Metal"
+          optional
+          placeholder="Optional"
+          options={METAL_TYPES}
+          value={fields.metal}
+          onChange={set("metal")}
         />
       </div>
     </>
@@ -361,6 +370,7 @@ export function AssessmentForm() {
     address: "",
     brand: "",
     itemType: "",
+    metal: "",
     hasGemstones: "",
   });
 
@@ -379,6 +389,7 @@ export function AssessmentForm() {
     address: fields.address,
     brand: fields.brand,
     itemType: fields.itemType,
+    metal: fields.metal,
     hasGemstones: fields.hasGemstones,
   };
 
@@ -406,6 +417,7 @@ export function AssessmentForm() {
             address: d.address ?? "",
             brand: d.brand ?? "",
             itemType: d.itemType ?? "",
+            metal: d.metal ?? "",
             hasGemstones: d.hasGemstones ?? "",
           });
           setPaymentIntentId(data.paymentIntentId ?? "");
@@ -426,6 +438,7 @@ export function AssessmentForm() {
       return (
         fields.name.trim() !== "" &&
         fields.email.trim() !== "" &&
+        fields.country !== "" &&
         fields.brand !== "" &&
         fields.itemType !== ""
       );

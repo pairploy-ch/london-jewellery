@@ -43,6 +43,7 @@ export type Submission = {
   address: string | null;
   brand: string | null;
   item_type: string | null;
+  metal: string | null;
   has_gemstones: boolean | null;
   payment_intent_id: string | null;
   payment_status: string | null;

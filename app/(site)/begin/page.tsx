@@ -135,8 +135,13 @@ export default function BeginPage() {
           will contact you with the next step.
         </p>
 
+        {/* step indicator + assessment form */}
+        <div className="mt-14 md:mt-16">
+          <AssessmentForm />
+        </div>
+
         {/* reassurance cards */}
-        <div className="mt-14 grid grid-cols-1 gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 md:mt-16 md:grid-cols-4">
+        <div className="mt-16 grid grid-cols-1 gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 md:mt-20 md:grid-cols-4">
           {ASSESSMENT_FEATURES.map((f, i) => {
             const Icon = FEATURE_ICONS[i];
             return (
@@ -152,11 +157,6 @@ export default function BeginPage() {
               </div>
             );
           })}
-        </div>
-
-        {/* step indicator + step 1 form */}
-        <div className="mt-16 md:mt-20">
-          <AssessmentForm />
         </div>
       </section>
     </main>

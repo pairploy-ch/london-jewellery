@@ -28,6 +28,9 @@ create index if not exists submissions_created_at_idx
 alter table public.submissions add column if not exists report jsonb;
 alter table public.submissions add column if not exists report_sent_at timestamptz;
 
+-- 1c) Metal type submitted with the piece (optional field on the assessment form)
+alter table public.submissions add column if not exists metal text;
+
 -- 2) Row Level Security ------------------------------------------------------
 -- Public visitors never read/write directly. Inserts + uploads happen on the
 -- server with the service-role key (which bypasses RLS). Signed-in admins may

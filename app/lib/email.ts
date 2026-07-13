@@ -4,35 +4,32 @@ export function isResendConfigured(): boolean {
   return Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
 }
 
-type ConfirmationParams = {
+type PaymentConfirmationParams = {
   to: string;
-  name: string;
-  orderRef: string;
 };
 
 /* ---------------------------------------------------------------------------
-   Customer payment / submission confirmation email.
+   Customer payment confirmation email — sent automatically the moment a
+   payment succeeds. Same fixed copy for every client, no per-order fields.
 --------------------------------------------------------------------------- */
-function confirmationTemplate({ name, orderRef }: ConfirmationParams) {
-  const subject = `Thank you for your payment - Assessment In Progress [Order #${orderRef}]`;
+function paymentConfirmationTemplate() {
+  const subject = "Payment Received - Your Assessment Is Underway";
 
-  const text = `Dear ${name || "Client"},
+  const text = `Dear Valued Client,
 
-Thank you for your payment and for choosing London Jewellery Consult.
-We have successfully received your submission.
+Thank you for choosing London Jewellery Consult.
 
-What happens next?
+We have successfully received your payment and assessment request. Our specialist will now review the information and photographs you have provided.
 
-- Review Process: Our specialist will review the images and details you provided and get back to you with the results within 48 hours.
+Your assessment is expected to be completed within 48 hours.
 
-- Please Note: This online visual consultation provides an expert opinion based on the images provided.
+If we require any additional information during the assessment process, we will contact you directly.
 
-We appreciate your business and look forward to delivering your assessment shortly.
+Thank you for choosing London Jewellery Consult.
 
-Best regards,
+Kind regards,
 
-The London Jewellery Consult Team
-Online Jewellery Authentication & Consultancy`;
+London Jewellery Consult`;
 
   const html = `<!doctype html>
 <html>
@@ -44,30 +41,27 @@ Online Jewellery Authentication & Consultancy`;
             <span style="color:#c4a877;font-family:Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;">London Jewellery Consult</span>
           </td></tr>
           <tr><td style="padding:32px;">
-            <p style="margin:0 0 4px;font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8a7f70;">Order #${orderRef}</p>
-            <h1 style="margin:0 0 20px;font-size:24px;font-weight:normal;color:#17120d;">Assessment in progress</h1>
+            <h1 style="margin:0 0 20px;font-size:24px;font-weight:normal;color:#17120d;">Payment received</h1>
 
-            <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#2a221a;">Dear ${name || "Client"},</p>
+            <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#2a221a;">Dear Valued Client,</p>
             <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#2a221a;">
-              Thank you for your payment and for choosing London Jewellery Consult.
-              We have successfully received your submission.
-            </p>
-
-            <h2 style="margin:24px 0 12px;font-size:18px;font-weight:normal;color:#17120d;">What happens next?</h2>
-            <p style="margin:0 0 14px;font-size:16px;line-height:1.6;color:#2a221a;">
-              <strong>Review Process:</strong> Our specialist will review the images and details you provided and get back to you with the results within <strong>48 hours</strong>.
+              Thank you for choosing London Jewellery Consult.
             </p>
             <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#2a221a;">
-              <strong>Please Note:</strong> This online visual consultation provides an expert opinion based on the images provided.
+              We have successfully received your payment and assessment request. Our specialist will now review the information and photographs you have provided.
             </p>
-
+            <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#2a221a;">
+              Your assessment is expected to be completed within <strong>48 hours</strong>.
+            </p>
+            <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#2a221a;">
+              If we require any additional information during the assessment process, we will contact you directly.
+            </p>
             <p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#2a221a;">
-              We appreciate your business and look forward to delivering your assessment shortly.
+              Thank you for choosing London Jewellery Consult.
             </p>
 
-            <p style="margin:0;font-size:16px;line-height:1.6;color:#2a221a;">Best regards,</p>
-            <p style="margin:4px 0 0;font-size:16px;line-height:1.5;color:#17120d;">The London Jewellery Consult Team</p>
-            <p style="margin:2px 0 0;font-size:14px;line-height:1.5;color:#8a7f70;">Online Jewellery Authentication &amp; Consultancy</p>
+            <p style="margin:0;font-size:16px;line-height:1.6;color:#2a221a;">Kind regards,</p>
+            <p style="margin:4px 0 0;font-size:16px;line-height:1.5;color:#17120d;">London Jewellery Consult</p>
           </td></tr>
           <tr><td style="border-top:1px solid #d9cdb9;padding:16px 32px;">
             <span style="color:#8a7f70;font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;">contact@londonjewelleryconsult.com · London, UK</span>
@@ -81,18 +75,19 @@ Online Jewellery Authentication & Consultancy`;
   return { subject, text, html };
 }
 
-/** Sends the customer confirmation email. Best-effort: returns false on
+/** Sends the payment confirmation email. Best-effort: returns false on
     failure (or when Resend isn't configured) without throwing. */
-export async function sendConfirmationEmail(
-  params: ConfirmationParams,
+export async function sendPaymentConfirmationEmail(
+  params: PaymentConfirmationParams,
 ): Promise<boolean> {
   if (!isResendConfigured()) return false;
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const { subject, html, text } = confirmationTemplate(params);
+    const { subject, html, text } = paymentConfirmationTemplate();
     const { error } = await resend.emails.send({
       from: process.env.EMAIL_FROM!,
       to: params.to,
+      replyTo: process.env.EMAIL_REPLY_TO || undefined,
       subject,
       html,
       text,
@@ -103,7 +98,7 @@ export async function sendConfirmationEmail(
     }
     return true;
   } catch (err) {
-    console.error("confirmation email failed", err);
+    console.error("payment confirmation email failed", err);
     return false;
   }
 }
@@ -187,6 +182,7 @@ export async function sendReportEmail(
     const { error } = await resend.emails.send({
       from: process.env.EMAIL_FROM!,
       to: params.to,
+      replyTo: process.env.EMAIL_REPLY_TO || undefined,
       subject,
       html,
       text,

@@ -37,6 +37,10 @@ export async function POST(request: Request) {
         },
       ],
       customer_email: str("email") || undefined,
+      // Requests Stripe's automatic payment receipt email for this PaymentIntent.
+      payment_intent_data: {
+        receipt_email: str("email") || undefined,
+      },
       // Carried across the redirect — read back on return via checkout-status.
       metadata: {
         name: str("name"),
@@ -46,6 +50,7 @@ export async function POST(request: Request) {
         address: str("address"),
         brand: str("brand"),
         itemType: str("itemType"),
+        metal: str("metal"),
         hasGemstones: str("hasGemstones"),
       },
       success_url: `${origin}/begin?session_id={CHECKOUT_SESSION_ID}`,

@@ -13,7 +13,7 @@ export default function Home() {
       <section
         className="relative flex h-screen items-center overflow-hidden bg-ink bg-[url('/images/london-hero-mobile.jpg')] bg-cover bg-center bg-no-repeat text-cream md:bg-[url('/images/london-hero-desktop.jpg')]"
       >
-        <div className="absolute inset-0 bg-ink/65" />
+        <div className="absolute inset-0 bg-ink/52" />
 
         <div className="relative mx-auto w-full max-w-6xl px-5 md:px-10">
           <Eyebrow>Independent Jewellery Authentication · Consultation</Eyebrow>
@@ -152,9 +152,6 @@ export default function Home() {
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button>Begin an Assessment</Button>
-            <Button variant="outline" href="#enquiry">
-              Make an Enquiry
-            </Button>
           </div>
         </div>
       </section>

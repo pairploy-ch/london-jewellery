@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { PHOTO_SLOTS } from "./content";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB per image
+const MIN_PHOTOS = 5;
 
 type Photo = { file: File; url: string };
 
@@ -15,6 +16,7 @@ export type SubmissionDetails = {
   address: string;
   brand: string;
   itemType: string;
+  metal: string;
   hasGemstones: string;
 };
 
@@ -73,8 +75,10 @@ export function PhotosStep({
   const count = slots.filter(Boolean).length;
 
   async function handleSubmit() {
-    if (count === 0) {
-      setError("Please add at least one photo.");
+    if (count < MIN_PHOTOS) {
+      setError(
+        "Please upload at least 5 photos from different angles before submitting your assessment.",
+      );
       return;
     }
     setSubmitting(true);
@@ -206,7 +210,7 @@ export function PhotosStep({
       <button
         type="button"
         onClick={handleSubmit}
-        disabled={count === 0 || submitting}
+        disabled={submitting}
         className="eyebrow mt-8 inline-flex w-full items-center justify-center bg-gold px-8 py-4 text-cream transition-colors duration-300 hover:bg-gold-soft disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
       >
         {submitting ? "Submitting…" : "Submit for assessment"}
