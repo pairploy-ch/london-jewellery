@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import { MAISONS, ITEM_TYPES, METAL_TYPES, ASSESSMENT_STEPS } from "./content";
 import { PaymentStep } from "./payment-step";
@@ -378,6 +378,13 @@ export function AssessmentForm() {
     useState<SubmissionDetails | null>(null);
   const [resuming, setResuming] = useState(false);
 
+  const successRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (submitted) {
+      successRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [submitted]);
+
   const set = (key: keyof Fields) => (v: string) =>
     setFields((f) => ({ ...f, [key]: v }));
 
@@ -475,7 +482,7 @@ export function AssessmentForm() {
   // success screen shown after photos are submitted (the "Step 5" confirmation)
   if (submitted) {
     return (
-      <div className="mx-auto max-w-xl">
+      <div ref={successRef} className="mx-auto max-w-xl scroll-mt-24">
         <StepIndicator current={ASSESSMENT_STEPS.length + 1} />
         <div className="mt-10 border border-line bg-cream p-7 text-center md:mt-12 md:p-10">
           <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-gold text-gold">
