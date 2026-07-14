@@ -54,6 +54,26 @@ export async function htmlToPdf(html: string): Promise<Buffer> {
   try {
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "load" });
+
+    // Report content (notes, observations) is free text and can run long
+    // enough to overflow a single A4 sheet. Rather than let it spill onto a
+    // second page, uniformly shrink the whole report to fit within 297mm —
+    // `zoom` (unlike `transform: scale`) actually reflows layout, so the
+    // shrunk content no longer occupies extra page height. Floored so
+    // pathologically long notes degrade to a (still legible) overflow onto
+    // a second page rather than shrinking to an unreadable sliver.
+    const MIN_SCALE = 0.75;
+    await page.evaluate((minScale) => {
+      const el = document.querySelector<HTMLElement>(".page");
+      if (!el) return;
+      const PX_PER_MM = 96 / 25.4;
+      const a4HeightPx = 297 * PX_PER_MM;
+      if (el.scrollHeight > a4HeightPx) {
+        const scale = Math.max(minScale, a4HeightPx / el.scrollHeight);
+        el.style.zoom = String(scale);
+      }
+    }, MIN_SCALE);
+
     const pdf = await page.pdf({
       format: "A4",
       printBackground: true,
