@@ -77,85 +77,85 @@ export function buildReportHtml(data: ReportData): string {
     -webkit-font-smoothing:antialiased;
   }
   .page{
-    width:210mm;
+    width:148mm;
     min-height:210mm;
     margin:0 auto;
     background:var(--soft-white);
-    padding:10mm 14mm;
+    padding:10mm;
     position:relative;
     display:flex;
     flex-direction:column;
   }
   .header-logo{display:flex;justify-content:center;}
-  .logo{width:64px;height:64px;}
+  .logo{width:56px;height:56px;}
   .rule{border:0;border-top:1px solid var(--line);margin:8px 0 12px;}
   .title-block{text-align:center;}
   .report-title{
-    font-family:"Playfair Display",serif;font-weight:600;font-size:22px;
-    letter-spacing:.18em;text-transform:uppercase;margin:0;color:var(--ink);
+    font-family:"Playfair Display",serif;font-weight:600;font-size:17px;
+    letter-spacing:.10em;text-transform:uppercase;margin:0;color:var(--ink);
   }
   .report-sub{
-    font-family:"Jost",sans-serif;letter-spacing:.34em;text-transform:uppercase;
-    font-size:10px;color:var(--gold);margin:6px 0 0;
+    font-family:"Jost",sans-serif;letter-spacing:.3em;text-transform:uppercase;
+    font-size:9px;color:var(--gold);margin:6px 0 0;
   }
-  .meta-line{display:flex;justify-content:center;align-items:center;gap:20px;margin:12px 0 0;flex-wrap:wrap;}
+  .meta-line{display:flex;justify-content:center;align-items:center;gap:14px;margin:10px 0 0;flex-wrap:wrap;}
   .meta-item{display:flex;flex-direction:column;align-items:center;gap:3px;}
   .meta-label{
-    font-family:"Jost",sans-serif;text-transform:uppercase;letter-spacing:.18em;
-    font-size:9px;font-weight:500;color:var(--ink-soft);
+    font-family:"Jost",sans-serif;text-transform:uppercase;letter-spacing:.15em;
+    font-size:8px;font-weight:500;color:var(--ink-soft);
   }
-  .meta-value{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:13px;color:var(--ink);}
-  .meta-divider{width:1px;height:20px;background:var(--line);}
+  .meta-value{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:11.5px;color:var(--ink);}
+  .meta-divider{width:1px;height:18px;background:var(--line);}
   .disclaimer{
-    font-family:"Cormorant Garamond",serif;font-style:italic;font-size:12.5px;
-    line-height:1.4;color:var(--muted);text-align:center;max-width:175mm;margin:12px auto 0;
+    font-family:"Cormorant Garamond",serif;font-style:italic;font-size:10.5px;
+    line-height:1.35;color:var(--muted);text-align:center;max-width:128mm;margin:10px auto 0;
   }
   .notes{
     background:var(--lavender);border:1px solid var(--lavender-border);
-    border-radius:4px;padding:11px 16px;margin:10px 0 6px;
+    border-radius:4px;padding:9px 12px;margin:10px 0 6px;
   }
   .notes-head{
-    font-family:"Jost",sans-serif;text-transform:uppercase;letter-spacing:.2em;
-    font-size:10px;font-weight:500;color:var(--lavender-ink);margin:0 0 6px;
+    font-family:"Jost",sans-serif;text-transform:uppercase;letter-spacing:.18em;
+    font-size:9px;font-weight:500;color:var(--lavender-ink);margin:0 0 6px;
     display:flex;align-items:center;gap:8px;
   }
   .notes ul{margin:0;padding:0;list-style:none;}
   .notes li{
-    font-family:"Cormorant Garamond",serif;font-size:12.5px;line-height:1.4;
-    color:var(--ink-soft);padding-left:16px;position:relative;margin-bottom:4px;
+    font-family:"Cormorant Garamond",serif;font-size:10.5px;line-height:1.3;
+    color:var(--ink-soft);padding-left:14px;position:relative;margin-bottom:4px;
   }
   .notes li:last-child{margin-bottom:0;}
   .notes li::before{content:"•";position:absolute;left:2px;color:var(--lavender-ink);}
   .columns{display:flex;gap:0;margin-top:10px;}
-  .col{flex:1;}
-  .col-left{padding-right:24px;}
-  .col-right{padding-left:24px;border-left:1px solid var(--line);}
+  .col{flex:1;min-width:0;}
+  .col-left{padding-right:12px;}
+  .col-right{padding-left:12px;border-left:1px solid var(--line);}
   .section-head{
-    font-family:"Jost",sans-serif;text-transform:uppercase;letter-spacing:.22em;
-    font-size:11px;font-weight:500;color:var(--ink-soft);margin:0 0 4px;
+    font-family:"Jost",sans-serif;text-transform:uppercase;letter-spacing:.16em;
+    font-size:9.5px;font-weight:500;color:var(--ink-soft);margin:0 0 4px;
   }
-  .section-rule{border:0;border-top:1px solid var(--line);margin:0 0 10px;}
+  .section-rule{border:0;border-top:1px solid var(--line);margin:0 0 8px;}
   .info-row{
-    display:flex;align-items:baseline;gap:14px;padding:6px 0;
+    display:flex;flex-direction:column;gap:1px;padding:5px 0;
     border-bottom:1px dotted var(--line);
   }
   .info-label{
-    font-family:"Jost",sans-serif;text-transform:uppercase;letter-spacing:.12em;
-    font-size:10px;font-weight:500;color:var(--ink);width:88px;flex-shrink:0;line-height:1.3;
+    font-family:"Jost",sans-serif;text-transform:uppercase;letter-spacing:.1em;
+    font-size:8.5px;font-weight:500;color:var(--ink);line-height:1.3;
   }
-  .info-value{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:13px;color:var(--muted);}
-  .option{display:flex;gap:10px;margin-bottom:11px;}
+  .info-value{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:11px;color:var(--muted);}
+  .option{display:flex;gap:8px;margin-bottom:10px;}
   .checkbox{
-    width:15px;height:15px;flex-shrink:0;margin-top:2px;border:1.4px solid var(--ink-soft);
+    width:13px;height:13px;flex-shrink:0;margin-top:2px;border:1.4px solid var(--ink-soft);
     border-radius:2px;display:flex;align-items:center;justify-content:center;
-    font-size:11px;line-height:1;color:var(--gold);
+    font-size:10px;line-height:1;color:var(--gold);
   }
   .checkbox.checked::after{content:"\\2665";}
-  .option-title{font-family:"Playfair Display",serif;font-weight:600;font-size:13px;letter-spacing:.02em;color:var(--ink);margin:0 0 3px;}
-  .option-desc{font-family:"Cormorant Garamond",serif;font-size:12px;line-height:1.35;color:var(--ink-soft);margin:0;}
-  .footer{margin-top:auto;padding-top:8px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-  .footer-thanks{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:12px;color:var(--muted);}
-  .footer-contact{font-family:"Jost",sans-serif;font-size:11px;color:var(--ink-soft);display:flex;align-items:center;gap:8px;}
+  .option-title{font-family:"Playfair Display",serif;font-weight:600;font-size:11px;letter-spacing:.01em;color:var(--ink);margin:0 0 3px;}
+  .option-desc{font-family:"Cormorant Garamond",serif;font-size:9.5px;line-height:1.3;color:var(--ink-soft);margin:0;}
+  .footer{margin-top:auto;padding-top:8px;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;}
+  .footer-thanks{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:10.5px;color:var(--muted);}
+  .footer-contact{font-family:"Jost",sans-serif;font-size:9px;color:var(--ink-soft);display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;}
   .footer-contact svg{width:14px;height:14px;color:var(--gold);}
   .footer-contact .sep{color:var(--line);margin:0 4px;}
 </style>
@@ -207,12 +207,12 @@ export function buildReportHtml(data: ReportData): string {
       <div class="col col-left">
         <h3 class="section-head">Item Information</h3>
         <hr class="section-rule" />
-        <div class="info-row"><span class="info-label">Brand<br/>Submitted</span><span class="info-value">${esc(data.brand) || "—"}</span></div>
+        <div class="info-row"><span class="info-label">Brand Submitted</span><span class="info-value">${esc(data.brand) || "—"}</span></div>
         <div class="info-row"><span class="info-label">Item Type</span><span class="info-value">${esc(data.itemType) || "—"}</span></div>
         <div class="info-row"><span class="info-label">Collection</span><span class="info-value">${esc(data.collection) || "—"}</span></div>
         <div class="info-row"><span class="info-label">Material</span><span class="info-value">${esc(data.material) || "—"}</span></div>
-        <div class="info-row"><span class="info-label">Serial /<br/>Marking</span><span class="info-value">${esc(data.serial) || "—"}</span></div>
-        <div class="info-row"><span class="info-label">Additional<br/>Details</span><span class="info-value">${esc(data.additionalDetails) || "—"}</span></div>
+        <div class="info-row"><span class="info-label">Serial / Marking</span><span class="info-value">${esc(data.serial) || "—"}</span></div>
+        <div class="info-row"><span class="info-label">Additional Details</span><span class="info-value">${esc(data.additionalDetails) || "—"}</span></div>
       </div>
 
       <div class="col col-right">

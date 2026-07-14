@@ -20,7 +20,7 @@ function localBrowserPath(): string | undefined {
   return candidates.find((p) => p && existsSync(p));
 }
 
-/* Renders an HTML string to a PDF buffer (210x210mm square, print
+/* Renders an HTML string to a PDF buffer (A5, 148x210mm, print
    backgrounds on). Uses @sparticuz/chromium on Vercel/serverless, a local
    Chrome/Edge install in dev. */
 export async function htmlToPdf(html: string): Promise<Buffer> {
@@ -56,7 +56,7 @@ export async function htmlToPdf(html: string): Promise<Buffer> {
     await page.setContent(html, { waitUntil: "load" });
 
     // Additional Details is free text and can run long enough to overflow
-    // the single square sheet. Rather than let it spill onto a second page,
+    // the single sheet. Rather than let it spill onto a second page,
     // uniformly shrink the whole report to fit within 210mm — `zoom` (unlike
     // `transform: scale`) actually reflows layout, so the shrunk content no
     // longer occupies extra page height. Floored so pathologically long
@@ -75,7 +75,7 @@ export async function htmlToPdf(html: string): Promise<Buffer> {
     }, MIN_SCALE);
 
     const pdf = await page.pdf({
-      width: "210mm",
+      width: "148mm",
       height: "210mm",
       printBackground: true,
       preferCSSPageSize: false,
