@@ -72,7 +72,11 @@ export async function POST(request: Request) {
     pdf = await htmlToPdf(html);
   } catch (err) {
     console.error("report PDF generation failed", err);
-    return NextResponse.json({ error: "pdf_failed" }, { status: 500 });
+    // TEMPORARY: surfaces the real error to diagnose a production-only
+    // failure that doesn't reproduce locally (@sparticuz/chromium's binary
+    // is Linux-only). Revert to a generic "pdf_failed" once root-caused.
+    const detail = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+    return NextResponse.json({ error: "pdf_failed", detail }, { status: 500 });
   }
 
   const sent = await sendReportEmail({
