@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReportData, ReportResult } from "../../lib/supabase/config";
 
 const RESULT_OPTIONS: { value: ReportResult; label: string }[] = [
@@ -26,32 +26,54 @@ export function ReportForm({
 }: {
   submissionId: string;
   clientEmail: string;
-  defaults: {
-    referenceNumber: string;
-    brand: string;
-    itemType: string;
-  };
+  defaults: Partial<ReportData>;
   reportSentAt: string | null;
 }) {
   const [fields, setFields] = useState<ReportData>({
-    referenceNumber: defaults.referenceNumber,
-    dateOfAssessment: todayISO(),
-    brand: defaults.brand,
-    itemType: defaults.itemType,
-    collection: "",
-    material: "",
-    serial: "",
-    additionalDetails: "",
-    result: "verified",
-    notes: "",
+    referenceNumber: defaults.referenceNumber ?? "",
+    dateOfAssessment: defaults.dateOfAssessment || todayISO(),
+    brand: defaults.brand ?? "",
+    itemType: defaults.itemType ?? "",
+    collection: defaults.collection ?? "",
+    material: defaults.material ?? "",
+    serial: defaults.serial ?? "",
+    additionalDetails: defaults.additionalDetails ?? "",
+    result: defaults.result ?? "verified",
+    notes: defaults.notes ?? "",
   });
   const [confirming, setConfirming] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sentAt, setSentAt] = useState(reportSentAt);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
 
   const set = (key: keyof ReportData) => (v: string) =>
     setFields((f) => ({ ...f, [key]: v }));
+
+  // Auto-saves the draft a moment after the admin stops typing, so notes and
+  // details survive a reload even before the report is actually sent.
+  const skipNextSave = useRef(true);
+  useEffect(() => {
+    if (skipNextSave.current) {
+      skipNextSave.current = false;
+      return;
+    }
+    setSaveStatus("saving");
+    const timeout = setTimeout(async () => {
+      try {
+        const res = await fetch("/api/admin/save-report-draft", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ submissionId, ...fields }),
+        });
+        setSaveStatus(res.ok ? "saved" : "error");
+      } catch {
+        setSaveStatus("error");
+      }
+    }, 900);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fields]);
 
   function handleReviewSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -133,6 +155,19 @@ export function ReportForm({
       onSubmit={handleReviewSubmit}
       className="mt-6 border border-line bg-cream p-6 md:p-8"
     >
+      <div className="mb-4 flex justify-end">
+        {saveStatus === "saving" ? (
+          <span className="eyebrow flex items-center gap-2 text-muted">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gold" />
+            Saving draft…
+          </span>
+        ) : saveStatus === "saved" ? (
+          <span className="eyebrow text-muted">Draft saved</span>
+        ) : saveStatus === "error" ? (
+          <span className="eyebrow text-[#b3261e]">Couldn&apos;t save draft</span>
+        ) : null}
+      </div>
+
       {sentAt ? (
         <p className="mb-6 border-l-2 border-gold bg-gold/5 p-4 font-serif text-base text-ink-soft">
           Report sent to the client on{" "}

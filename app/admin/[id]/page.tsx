@@ -136,6 +136,9 @@ export default async function SubmissionPage({
             referenceNumber: s.reference_number ?? s.id.slice(0, 8).toUpperCase(),
             brand: s.brand ?? "",
             itemType: s.item_type ?? "",
+            // Restores a previously saved draft (or the last sent report) in
+            // full, so reopening this page doesn't lose earlier notes/details.
+            ...(s.report ?? {}),
           }}
           reportSentAt={s.report_sent_at}
         />

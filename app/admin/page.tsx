@@ -7,6 +7,7 @@ import {
   type Submission,
 } from "../lib/supabase/config";
 import { logout } from "./actions";
+import { SignOutButton } from "./sign-out-button";
 
 export const metadata: Metadata = {
   title: "Submissions — Admin",
@@ -50,12 +51,7 @@ export default async function AdminPage() {
             </h1>
           </div>
           <form action={logout}>
-            <button
-              type="submit"
-              className="eyebrow border border-line px-5 py-3 text-ink transition-colors hover:bg-ink hover:text-cream"
-            >
-              Sign out
-            </button>
+            <SignOutButton />
           </form>
         </div>
 

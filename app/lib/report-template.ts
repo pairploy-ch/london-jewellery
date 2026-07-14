@@ -126,7 +126,7 @@ export function buildReportHtml(data: ReportData): string {
   }
   .notes li:last-child{margin-bottom:0;}
   .notes li::before{content:"•";position:absolute;left:2px;color:var(--lavender-ink);}
-  .columns{display:flex;gap:0;margin-top:10px;}
+  .columns{display:flex;gap:0;margin-top:28px;}
   .col{flex:1;min-width:0;}
   .col-left{padding-right:12px;}
   .col-right{padding-left:12px;border-left:1px solid var(--line);}
@@ -148,9 +148,13 @@ export function buildReportHtml(data: ReportData): string {
   .checkbox{
     width:13px;height:13px;flex-shrink:0;margin-top:2px;border:1.4px solid var(--ink-soft);
     border-radius:2px;display:flex;align-items:center;justify-content:center;
-    font-size:10px;line-height:1;color:var(--gold);
   }
-  .checkbox.checked::after{content:"\\2665";}
+  .checkbox.checked{background:var(--gold);border-color:var(--gold);}
+  .checkbox.checked::after{
+    content:"";width:5px;height:8px;
+    border:solid #fff;border-width:0 1.6px 1.6px 0;
+    transform:rotate(45deg) translate(-1px,-1px);
+  }
   .option-title{font-family:"Playfair Display",serif;font-weight:600;font-size:11px;letter-spacing:.01em;color:var(--ink);margin:0 0 3px;}
   .option-desc{font-family:"Cormorant Garamond",serif;font-size:9.5px;line-height:1.3;color:var(--ink-soft);margin:0;}
   .footer{margin-top:auto;padding-top:8px;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;}
@@ -171,7 +175,6 @@ export function buildReportHtml(data: ReportData): string {
           <path d="M79 40 q9 -3 13 2 q-7 3 -13 -2Z" fill="#a4854f" stroke="none"/>
         </g>
         <text x="60" y="88" text-anchor="middle" font-family="'Playfair Display', serif" font-weight="600" font-size="52" letter-spacing="1" fill="#1a1510">LJC</text>
-        <path d="M30 98 H90" stroke="#a4854f" stroke-width="1.2" stroke-linecap="round"/>
       </svg>
     </div>
 
