@@ -10,6 +10,13 @@ const nextConfig: NextConfig = {
   // resolve on its own — keep it (and puppeteer-core) external so it's
   // required from node_modules as-is at runtime.
   serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
+  // Being external isn't enough on its own: @sparticuz/chromium resolves its
+  // bundled binary via a dynamic path at runtime, which Next's output file
+  // tracer can't follow statically, so the bin/ directory silently gets left
+  // out of the deployed function unless explicitly included here.
+  outputFileTracingIncludes: {
+    "/api/admin/generate-report": ["./node_modules/@sparticuz/chromium/bin/**/*"],
+  },
 };
 
 export default nextConfig;
