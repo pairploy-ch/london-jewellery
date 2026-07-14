@@ -513,7 +513,7 @@ export function AssessmentForm() {
             <p className="mx-auto mt-6 max-w-md border-t border-line pt-6 font-serif text-lg text-ink">
               Assessment Reference Number
               <br />
-              <span className="font-display text-2xl text-gold">{referenceNumber}</span>
+              <span className="font-serif text-2xl text-gold">{referenceNumber}</span>
             </p>
           ) : null}
         </div>

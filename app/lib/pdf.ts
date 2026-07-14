@@ -20,9 +20,9 @@ function localBrowserPath(): string | undefined {
   return candidates.find((p) => p && existsSync(p));
 }
 
-/* Renders an HTML string to a PDF buffer (A4, print backgrounds on).
-   Uses @sparticuz/chromium on Vercel/serverless, a local Chrome/Edge install
-   in dev. */
+/* Renders an HTML string to a PDF buffer (210x210mm square, print
+   backgrounds on). Uses @sparticuz/chromium on Vercel/serverless, a local
+   Chrome/Edge install in dev. */
 export async function htmlToPdf(html: string): Promise<Buffer> {
   const puppeteer = await import("puppeteer-core");
   const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
@@ -55,27 +55,28 @@ export async function htmlToPdf(html: string): Promise<Buffer> {
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "load" });
 
-    // Report content (notes, observations) is free text and can run long
-    // enough to overflow a single A4 sheet. Rather than let it spill onto a
-    // second page, uniformly shrink the whole report to fit within 297mm —
-    // `zoom` (unlike `transform: scale`) actually reflows layout, so the
-    // shrunk content no longer occupies extra page height. Floored so
-    // pathologically long notes degrade to a (still legible) overflow onto
-    // a second page rather than shrinking to an unreadable sliver.
+    // Additional Details is free text and can run long enough to overflow
+    // the single square sheet. Rather than let it spill onto a second page,
+    // uniformly shrink the whole report to fit within 210mm — `zoom` (unlike
+    // `transform: scale`) actually reflows layout, so the shrunk content no
+    // longer occupies extra page height. Floored so pathologically long
+    // input degrades to a (still legible) overflow onto a second page
+    // rather than shrinking to an unreadable sliver.
     const MIN_SCALE = 0.75;
     await page.evaluate((minScale) => {
       const el = document.querySelector<HTMLElement>(".page");
       if (!el) return;
       const PX_PER_MM = 96 / 25.4;
-      const a4HeightPx = 297 * PX_PER_MM;
-      if (el.scrollHeight > a4HeightPx) {
-        const scale = Math.max(minScale, a4HeightPx / el.scrollHeight);
+      const pageHeightPx = 210 * PX_PER_MM;
+      if (el.scrollHeight > pageHeightPx) {
+        const scale = Math.max(minScale, pageHeightPx / el.scrollHeight);
         el.style.zoom = String(scale);
       }
     }, MIN_SCALE);
 
     const pdf = await page.pdf({
-      format: "A4",
+      width: "210mm",
+      height: "210mm",
       printBackground: true,
       preferCSSPageSize: false,
     });
