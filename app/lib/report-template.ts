@@ -28,8 +28,16 @@ const RESULT_COPY: Record<
   },
 };
 
+// Drawn as an inline SVG path rather than a "♥" text glyph — the Unicode
+// character depends on the renderer's installed fonts having that glyph,
+// which serverless Chromium doesn't reliably have, silently leaving the
+// checkbox looking empty even when checked.
+const HEART_SVG =
+  '<svg width="8" height="7" viewBox="0 0 16 14" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M8 13.4C8 13.4 1 9.4 1 4.7 1 2.4 2.8 0.9 4.9 0.9 6.2 0.9 7.3 1.6 8 2.7 8.7 1.6 9.8 0.9 11.1 0.9 13.2 0.9 15 2.4 15 4.7 15 9.4 8 13.4 8 13.4Z"/></svg>';
+
 function checkbox(result: ReportData["result"], key: ReportData["result"]) {
-  return `<span class="checkbox${result === key ? " checked" : ""}"></span>`;
+  const checked = result === key;
+  return `<span class="checkbox${checked ? " checked" : ""}">${checked ? HEART_SVG : ""}</span>`;
 }
 
 function option(result: ReportData["result"], key: ReportData["result"]) {
@@ -150,11 +158,6 @@ export function buildReportHtml(data: ReportData): string {
     border-radius:2px;display:flex;align-items:center;justify-content:center;
   }
   .checkbox.checked{background:var(--gold);border-color:var(--gold);}
-  .checkbox.checked::after{
-    content:"";width:5px;height:8px;
-    border:solid #fff;border-width:0 1.6px 1.6px 0;
-    transform:rotate(45deg) translate(-1px,-1px);
-  }
   .option-title{font-family:"Playfair Display",serif;font-weight:600;font-size:11px;letter-spacing:.01em;color:var(--ink);margin:0 0 3px;}
   .option-desc{font-family:"Cormorant Garamond",serif;font-size:9.5px;line-height:1.3;color:var(--ink-soft);margin:0;}
   .footer{margin-top:auto;padding-top:8px;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;}
