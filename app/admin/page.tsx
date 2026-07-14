@@ -72,7 +72,7 @@ export default async function AdminPage() {
             <table className="w-full min-w-[820px] border-collapse text-left">
               <thead>
                 <tr className="border-b border-line bg-cream-deep/40">
-                  {["Date", "Name", "Brand", "Item", "Gemstone", "Payment", "Photos", "Status"].map(
+                  {["Reference", "Date", "Name", "Brand", "Item", "Gemstone", "Payment", "Photos", "Status"].map(
                     (h) => (
                       <th key={h} className="eyebrow px-4 py-4 text-muted">
                         {h}
@@ -87,6 +87,9 @@ export default async function AdminPage() {
                     key={s.id}
                     className="border-b border-line/70 transition-colors hover:bg-cream-deep/30"
                   >
+                    <td className="px-4 py-4 font-serif text-sm text-ink">
+                      {s.reference_number ?? "—"}
+                    </td>
                     <td className="px-4 py-4 font-serif text-sm text-ink-soft">
                       {formatDate(s.created_at)}
                     </td>

@@ -53,31 +53,54 @@ export async function POST(request: Request) {
 
   const admin = createAdminClient();
 
-  const hasGemstones = field("hasGemstones");
-  const { data: row, error: insertError } = await admin
-    .from("submissions")
-    .insert({
-      name: field("name"),
-      email: field("email"),
-      phone: field("phone") || null,
-      country: field("country") || null,
-      address: field("address") || null,
-      brand: field("brand") || null,
-      item_type: field("itemType") || null,
-      metal: field("metal") || null,
-      has_gemstones:
-        hasGemstones === "yes" ? true : hasGemstones === "no" ? false : null,
-      payment_intent_id: paymentIntentId || null,
-      payment_status,
-      amount,
-      currency,
-    })
-    .select("id")
-    .single();
+  // The order record is normally created already, the moment payment
+  // succeeded (see /api/checkout-status) — this just attaches photos to it.
+  // The insert path below only runs as a fallback (e.g. local preview mode
+  // with Stripe unconfigured, where checkout never happened).
+  const submissionId = field("submissionId");
+  let rowId: string;
+  let referenceNumber = "";
 
-  if (insertError || !row) {
-    console.error("submission insert failed", insertError);
-    return NextResponse.json({ error: "save_failed" }, { status: 500 });
+  if (submissionId) {
+    const { data: existing, error: fetchError } = await admin
+      .from("submissions")
+      .select("id, reference_number")
+      .eq("id", submissionId)
+      .single();
+    if (fetchError || !existing) {
+      return NextResponse.json({ error: "submission_not_found" }, { status: 404 });
+    }
+    rowId = existing.id;
+    referenceNumber = existing.reference_number ?? "";
+  } else {
+    const hasGemstones = field("hasGemstones");
+    const { data: inserted, error: insertError } = await admin
+      .from("submissions")
+      .insert({
+        name: field("name"),
+        email: field("email"),
+        phone: field("phone") || null,
+        country: field("country") || null,
+        address: field("address") || null,
+        brand: field("brand") || null,
+        item_type: field("itemType") || null,
+        metal: field("metal") || null,
+        has_gemstones:
+          hasGemstones === "yes" ? true : hasGemstones === "no" ? false : null,
+        payment_intent_id: paymentIntentId || null,
+        payment_status,
+        amount,
+        currency,
+      })
+      .select("id, reference_number")
+      .single();
+
+    if (insertError || !inserted) {
+      console.error("submission insert failed", insertError);
+      return NextResponse.json({ error: "save_failed" }, { status: 500 });
+    }
+    rowId = inserted.id;
+    referenceNumber = inserted.reference_number ?? "";
   }
 
   // Upload photos into a folder named after the submission id.
@@ -85,7 +108,7 @@ export async function POST(request: Request) {
   for (let i = 0; i < photos.length; i++) {
     const file = photos[i];
     const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
-    const path = `${row.id}/${i + 1}.${ext}`;
+    const path = `${rowId}/${i + 1}.${ext}`;
     const buffer = Buffer.from(await file.arrayBuffer());
     const { error: uploadError } = await admin.storage
       .from(PHOTO_BUCKET)
@@ -96,7 +119,7 @@ export async function POST(request: Request) {
   await admin
     .from("submissions")
     .update({ photo_paths: paths })
-    .eq("id", row.id);
+    .eq("id", rowId);
 
-  return NextResponse.json({ ok: true, id: row.id });
+  return NextResponse.json({ ok: true, id: rowId, referenceNumber });
 }

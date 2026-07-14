@@ -6,30 +6,51 @@ export function isResendConfigured(): boolean {
 
 type PaymentConfirmationParams = {
   to: string;
+  referenceNumber: string;
 };
+
+// Sent from a dedicated no-reply address — this email intentionally does not
+// accept replies; customers are pointed to contact@ instead in the copy below.
+const PAYMENT_CONFIRMATION_FROM =
+  "London Jewellery Consult <noreply@londonjewelleryconsult.com>";
 
 /* ---------------------------------------------------------------------------
    Customer payment confirmation email — sent automatically the moment a
-   payment succeeds. Same fixed copy for every client, no per-order fields.
+   payment succeeds. Same fixed copy for every client, only the reference
+   number varies.
 --------------------------------------------------------------------------- */
-function paymentConfirmationTemplate() {
-  const subject = "Payment Received - Your Assessment Is Underway";
+function paymentConfirmationTemplate(referenceNumber: string) {
+  const subject = referenceNumber
+    ? `Payment Received - Your Assessment Is Underway [${referenceNumber}]`
+    : "Payment Received - Your Assessment Is Underway";
+
+  const refLineText = referenceNumber
+    ? `Your Assessment Reference Number is: ${referenceNumber}\n\n`
+    : "";
 
   const text = `Dear Valued Client,
 
 Thank you for choosing London Jewellery Consult.
 
-We have successfully received your payment and assessment request. Our specialist will now review the information and photographs you have provided.
+${refLineText}We have successfully received your payment and assessment request. Our specialist will now review the information and photographs you have provided.
 
 Your assessment is expected to be completed within 48 hours.
 
 If we require any additional information during the assessment process, we will contact you directly.
+
+This is an automated message — please do not reply to this email. For any questions, please contact us at contact@londonjewelleryconsult.com.
 
 Thank you for choosing London Jewellery Consult.
 
 Kind regards,
 
 London Jewellery Consult`;
+
+  const refLineHtml = referenceNumber
+    ? `<p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#2a221a;">
+              Your Assessment Reference Number is: <strong>${referenceNumber}</strong>
+            </p>`
+    : "";
 
   const html = `<!doctype html>
 <html>
@@ -47,17 +68,18 @@ London Jewellery Consult`;
             <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#2a221a;">
               Thank you for choosing London Jewellery Consult.
             </p>
+            ${refLineHtml}
             <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#2a221a;">
               We have successfully received your payment and assessment request. Our specialist will now review the information and photographs you have provided.
             </p>
             <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#2a221a;">
-              Your assessment is expected to be completed within <strong>48 hours</strong>.
+              Your assessment is expected to be completed within 48 hours.
             </p>
             <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#2a221a;">
               If we require any additional information during the assessment process, we will contact you directly.
             </p>
             <p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#2a221a;">
-              Thank you for choosing London Jewellery Consult.
+              This is an automated message — please do not reply to this email. For any questions, please contact us at <a href="mailto:contact@londonjewelleryconsult.com" style="color:#a4854f;">contact@londonjewelleryconsult.com</a>.
             </p>
 
             <p style="margin:0;font-size:16px;line-height:1.6;color:#2a221a;">Kind regards,</p>
@@ -83,11 +105,10 @@ export async function sendPaymentConfirmationEmail(
   if (!isResendConfigured()) return false;
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const { subject, html, text } = paymentConfirmationTemplate();
+    const { subject, html, text } = paymentConfirmationTemplate(params.referenceNumber);
     const { error } = await resend.emails.send({
-      from: process.env.EMAIL_FROM!,
+      from: PAYMENT_CONFIRMATION_FROM,
       to: params.to,
-      replyTo: process.env.EMAIL_REPLY_TO || undefined,
       subject,
       html,
       text,

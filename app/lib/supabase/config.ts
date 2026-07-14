@@ -35,6 +35,7 @@ export type ReportData = {
 
 export type Submission = {
   id: string;
+  reference_number: string | null;
   created_at: string;
   name: string;
   email: string;

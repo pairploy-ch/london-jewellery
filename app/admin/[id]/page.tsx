@@ -68,6 +68,9 @@ export default async function SubmissionPage({
         <p className="mt-2 font-serif text-lg text-ink-soft">
           {s.brand ?? "—"} · {s.item_type ?? "—"}
         </p>
+        <p className="eyebrow mt-3 text-gold">
+          {s.reference_number ?? "No reference number"}
+        </p>
 
         <div className="mt-10">
           <DetailRow label="Email" value={s.email} />
@@ -130,7 +133,7 @@ export default async function SubmissionPage({
           submissionId={s.id}
           clientEmail={s.email}
           defaults={{
-            referenceNumber: s.id.slice(0, 8).toUpperCase(),
+            referenceNumber: s.reference_number ?? s.id.slice(0, 8).toUpperCase(),
             brand: s.brand ?? "",
             itemType: s.item_type ?? "",
           }}

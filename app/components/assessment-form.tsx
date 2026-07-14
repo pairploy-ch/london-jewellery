@@ -362,6 +362,8 @@ export function AssessmentForm() {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [paymentIntentId, setPaymentIntentId] = useState("");
+  const [submissionId, setSubmissionId] = useState("");
+  const [referenceNumber, setReferenceNumber] = useState("");
   const [fields, setFields] = useState<Fields>({
     name: "",
     email: "",
@@ -428,6 +430,8 @@ export function AssessmentForm() {
             hasGemstones: d.hasGemstones ?? "",
           });
           setPaymentIntentId(data.paymentIntentId ?? "");
+          setSubmissionId(data.submissionId ?? "");
+          setReferenceNumber(data.referenceNumber ?? "");
           setStep(4);
         }
       })
@@ -505,6 +509,13 @@ export function AssessmentForm() {
             <span className="text-ink">{fields.email || "your email"}</span>, and
             your written assessment will follow by email within 48 hours.
           </p>
+          {referenceNumber ? (
+            <p className="mx-auto mt-6 max-w-md border-t border-line pt-6 font-serif text-lg text-ink">
+              Assessment Reference Number
+              <br />
+              <span className="font-display text-2xl text-gold">{referenceNumber}</span>
+            </p>
+          ) : null}
         </div>
       </div>
     );
@@ -530,7 +541,11 @@ export function AssessmentForm() {
           <PhotosStep
             details={restoredDetails ?? currentDetails}
             paymentIntentId={paymentIntentId}
-            onSubmitted={() => setSubmitted(true)}
+            submissionId={submissionId}
+            onSubmitted={(refNum) => {
+              if (refNum) setReferenceNumber(refNum);
+              setSubmitted(true);
+            }}
           />
         ) : null}
 

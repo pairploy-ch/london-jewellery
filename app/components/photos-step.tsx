@@ -23,11 +23,13 @@ export type SubmissionDetails = {
 export function PhotosStep({
   details,
   paymentIntentId,
+  submissionId,
   onSubmitted,
 }: {
   details: SubmissionDetails;
   paymentIntentId: string;
-  onSubmitted: () => void;
+  submissionId: string;
+  onSubmitted: (referenceNumber: string) => void;
 }) {
   const [slots, setSlots] = useState<(Photo | null)[]>(() =>
     Array(PHOTO_SLOTS.length).fill(null),
@@ -87,6 +89,7 @@ export function PhotosStep({
       const fd = new FormData();
       Object.entries(details).forEach(([k, v]) => fd.append(k, v ?? ""));
       fd.append("paymentIntentId", paymentIntentId);
+      fd.append("submissionId", submissionId);
       slots.forEach((p, i) => {
         if (p) {
           fd.append("photos", p.file);
@@ -98,13 +101,13 @@ export function PhotosStep({
 
       // 503 = backend not configured yet → treat as a preview completion.
       if (res.status === 503) {
-        onSubmitted();
+        onSubmitted("");
         return;
       }
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error ?? "submit_failed");
 
-      onSubmitted();
+      onSubmitted(data?.referenceNumber ?? "");
     } catch {
       setError("Something went wrong submitting your photos. Please try again.");
       setSubmitting(false);
