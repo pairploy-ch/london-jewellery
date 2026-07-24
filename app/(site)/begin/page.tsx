@@ -128,7 +128,7 @@ const FEATURE_ICONS = [ShieldIcon, ClockIcon, LockIcon, BadgeIcon];
 export default function BeginPage() {
   return (
     <main className="flex-1">
-      <section className="mx-auto max-w-6xl px-5 py-16 md:px-10 md:py-24">
+      <section className="mx-auto max-w-6xl px-5 pb-16 pt-32 md:px-10 md:pb-24 md:pt-44">
         {/* intro */}
         <p className="mx-auto max-w-xl text-center font-serif text-xl font-light leading-relaxed text-ink-soft md:text-2xl">
           Tell us about your piece and submit your photographs for review. We

@@ -2,19 +2,41 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NAV_LINKS } from "./nav";
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  // Transparent over the hero at the top of the page, solid once scrolled
+  // past it so nav text stays legible against lighter sections below.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // The mobile dropdown must stay legible even while the header itself is
+  // transparent at the top of the page. /begin has no dark section behind
+  // the header at scroll-top (unlike the home hero and every PageHero-based
+  // page), so it always gets the solid header.
+  const solid = pathname === "/begin" || scrolled || open;
+
   return (
-    <header className="sticky top-0 z-50 border-b border-line-dark/60 bg-ink/95 text-cream backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 md:px-10">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 border-b text-cream transition-colors duration-300 ${
+        solid
+          ? "border-line-dark/60 bg-ink/95 backdrop-blur"
+          : "border-transparent bg-transparent"
+      }`}
+    >
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 md:h-20 md:px-10">
         <Link
           href="/"
           className="eyebrow text-cream"
