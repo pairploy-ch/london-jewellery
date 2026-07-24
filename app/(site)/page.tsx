@@ -14,7 +14,7 @@ export default function Home() {
       <section
         className="relative flex h-screen items-center overflow-hidden bg-ink bg-[url('/images/london-hero-mobile.jpg')] bg-cover bg-center bg-no-repeat text-cream md:bg-[url('/images/london-hero-desktop.jpg')]"
       >
-        <div className="absolute inset-0 bg-ink/52" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/85 via-ink/0 to-ink/0 bg-ink/0 md:bg-none" />
 
         <div className="relative mx-auto w-full max-w-6xl px-5 md:px-10">
           {/* mobile — headline first, then a rule, then eyebrow, then a text link */}
@@ -32,10 +32,25 @@ export default function Home() {
             </p>
             <Link
               href="/begin"
-              className="eyebrow mt-8 inline-flex items-center gap-2 border-b border-cream/50 pb-1 text-cream transition-colors hover:border-gold hover:text-gold"
+              className="group eyebrow mt-8 inline-flex items-center gap-2 border-b border-cream/50 pb-1 text-cream transition-colors hover:border-gold hover:text-gold"
             >
               Begin an Assessment
-              <span aria-hidden="true">→</span>
+              <svg
+                width="16"
+                height="10"
+                viewBox="0 0 16 10"
+                fill="none"
+                aria-hidden="true"
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              >
+                <path
+                  d="M0.5 5H15M15 5L11 1M15 5L11 9"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </Link>
           </div>
 
