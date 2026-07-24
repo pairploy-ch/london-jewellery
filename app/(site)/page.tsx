@@ -14,7 +14,7 @@ export default function Home() {
       <section
         className="relative flex h-screen items-center overflow-hidden bg-ink bg-[url('/images/london-hero-mobile.jpg')] bg-cover bg-center bg-no-repeat text-cream md:bg-[url('/images/london-hero-desktop.jpg')]"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-ink/85 via-ink/0 to-ink/0 bg-ink/0 md:bg-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/85 via-ink/45 to-ink/0 bg-ink/0 md:bg-none" />
 
         <div className="relative mx-auto w-full max-w-6xl px-5 md:px-10">
           {/* mobile — headline first, then a rule, then eyebrow, then a text link */}
