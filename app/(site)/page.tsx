@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Eyebrow, Button, ImagePlate, SectionLabel } from "@/app/components/ui";
 import { MAISONS, STEPS, OUTCOMES } from "@/app/components/content";
 
@@ -16,19 +17,44 @@ export default function Home() {
         <div className="absolute inset-0 bg-ink/52" />
 
         <div className="relative mx-auto w-full max-w-6xl px-5 md:px-10">
-          <Eyebrow>Independent Jewellery Authentication · Consultation</Eyebrow>
-          <h1 className="mt-8 font-display text-5xl leading-[1.05] tracking-tight md:text-7xl">
-            Expertise.
-            <br />
-            Integrity.
-            <br />
-            Reliability.
-          </h1>
-          <p className="mt-8 max-w-md font-serif text-xl font-light text-cream/70 md:text-2xl">
-            An independent consultancy for branded fine jewellery.
-          </p>
-          <div className="mt-10">
-            <Button>Begin an Assessment</Button>
+          {/* mobile — headline first, then a rule, then eyebrow, then a text link */}
+          <div className="md:hidden">
+            <h1 className="font-display text-5xl leading-[1.05] tracking-tight text-gold-soft">
+              Expertise.
+              <br />
+              Integrity.
+              <br />
+              Reliability.
+            </h1>
+            <span className="mt-6 block h-px w-16 bg-cream/40" />
+            <p className="eyebrow mt-6 max-w-[15rem] text-cream">
+              Independent Jewellery Authentication · Consultation
+            </p>
+            <Link
+              href="/begin"
+              className="eyebrow mt-8 inline-flex items-center gap-2 border-b border-cream/50 pb-1 text-cream transition-colors hover:border-gold hover:text-gold"
+            >
+              Begin an Assessment
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+
+          {/* desktop — unchanged */}
+          <div className="hidden md:block">
+            <Eyebrow>Independent Jewellery Authentication · Consultation</Eyebrow>
+            <h1 className="mt-8 font-display text-7xl leading-[1.05] tracking-tight">
+              Expertise.
+              <br />
+              Integrity.
+              <br />
+              Reliability.
+            </h1>
+            <p className="mt-8 max-w-md font-serif text-2xl font-light text-cream/70">
+              An independent consultancy for branded fine jewellery.
+            </p>
+            <div className="mt-10">
+              <Button>Begin an Assessment</Button>
+            </div>
           </div>
         </div>
       </section>
