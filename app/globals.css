@@ -28,23 +28,27 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* small wide-tracked uppercase label used throughout the design
-   — kept in @layer components so Tailwind utility classes (e.g.
-   text-[14px], font-thin) placed alongside "eyebrow" can still
-   override it; unlayered CSS always wins over @layer rules
-   regardless of specificity, which silently broke those overrides. */
-@layer components {
-  .eyebrow {
-    font-family: var(--font-sans);
-    text-transform: uppercase;
-    letter-spacing: 0.32em;
-    font-size: 0.625rem;
-    font-weight: 400;
-  }
+/* small wide-tracked uppercase label used throughout the design.
+   Deliberately unlayered plain CSS — do not combine this class with
+   Tailwind utilities meant to override font-size/font-weight on the
+   same element, since unlayered CSS always wins over @layer rules
+   (where Tailwind utilities live) regardless of specificity. Wrapping
+   this in @layer components does NOT fix that here: this project's
+   Turbopack build strips author-written @layer blocks back out to
+   unlayered CSS rather than merging them into Tailwind's own layers.
+   To override eyebrow's look on a specific element, don't apply this
+   class there — write the equivalent utilities directly instead
+   (font-sans uppercase tracking-[0.32em] + your own size/weight). */
+.eyebrow {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  font-size: 0.625rem;
+  font-weight: 400;
+}
 
-  @media (min-width: 768px) {
-    .eyebrow {
-      font-size: 0.6875rem;
-    }
+@media (min-width: 768px) {
+  .eyebrow {
+    font-size: 0.6875rem;
   }
 }
