@@ -19,7 +19,7 @@ export default function Home() {
         <div className="relative mx-auto w-full max-w-6xl px-5 md:px-10">
           {/* mobile — headline first, then a rule, then eyebrow, then a text link */}
           <div className="md:hidden">
-            <h1 className="font-display text-[28px] leading-[1.3] tracking-tight text-gold-soft">
+            <h1 className="font-display text-[32px] leading-[1.3] tracking-[0.4px] text-gold-soft">
               Expertise.
               <br />
               Integrity.
