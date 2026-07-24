@@ -28,17 +28,23 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* small wide-tracked uppercase label used throughout the design */
-.eyebrow {
-  font-family: var(--font-sans);
-  text-transform: uppercase;
-  letter-spacing: 0.32em;
-  font-size: 0.625rem;
-  font-weight: 400;
-}
-
-@media (min-width: 768px) {
+/* small wide-tracked uppercase label used throughout the design
+   — kept in @layer components so Tailwind utility classes (e.g.
+   text-[14px], font-thin) placed alongside "eyebrow" can still
+   override it; unlayered CSS always wins over @layer rules
+   regardless of specificity, which silently broke those overrides. */
+@layer components {
   .eyebrow {
-    font-size: 0.6875rem;
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.625rem;
+    font-weight: 400;
+  }
+
+  @media (min-width: 768px) {
+    .eyebrow {
+      font-size: 0.6875rem;
+    }
   }
 }
