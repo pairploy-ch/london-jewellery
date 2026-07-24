@@ -27,7 +27,7 @@ export default function Home() {
               Reliability.
             </h1>
             <span className="mt-6 block h-px w-16 bg-cream/40" />
-            <p className="eyebrow mt-6 max-w-[15rem] text-cream">
+            <p className="eyebrow mt-6 max-w-[15rem] text-[10px] font-thin leading-[2] text-cream">
               Independent Jewellery Authentication
             </p>
             <Link
