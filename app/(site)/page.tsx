@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Eyebrow, Button, ImagePlate, SectionLabel } from "@/app/components/ui";
 import { MAISONS, STEPS, OUTCOMES } from "@/app/components/content";
 
@@ -13,19 +14,59 @@ export default function Home() {
       <section
         className="relative flex h-screen items-center overflow-hidden bg-ink bg-[url('/images/london-hero-mobile.jpg')] bg-cover bg-center bg-no-repeat text-cream md:bg-[url('/images/london-hero-desktop.jpg')]"
       >
-        <div className="absolute inset-0 bg-ink/52" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/85 via-ink/45 to-ink/0 bg-ink/0 md:bg-none" />
 
         <div className="relative mx-auto w-full max-w-6xl px-5 md:px-10">
-          <Eyebrow>Independent Jewellery Authentication · Consultation</Eyebrow>
-          <h1 className="mt-8 font-display text-5xl leading-[1.05] tracking-tight md:text-7xl">
-            Expertise.
-            <br />
-            Integrity.
-            <br />
-            Reliability.
-          </h1>
-          <div className="mt-10">
-            <Button>Begin an Assessment</Button>
+          {/* mobile — eyebrow first, then headline, then a rule, then a text link */}
+          <div className="md:hidden">
+            <p className="max-w-[20rem] font-sans uppercase tracking-[0.32em] text-[14px] font-thin leading-[2] text-cream">
+              Independent Jewellery Authentication · Consultation
+            </p>
+            <h1 className="mt-6 font-display text-[32px] leading-[1.3] tracking-[0.4px] text-gold-soft">
+              Expertise.
+              <br />
+              Integrity.
+              <br />
+              Reliability.
+            </h1>
+            <span className="mt-10 block h-px w-16 bg-cream/40" />
+            <Link
+              href="/begin"
+              className="group eyebrow mt-8 inline-flex items-center gap-2 border-b border-cream/50 pb-1 text-cream transition-colors hover:border-gold hover:text-gold"
+            >
+              Begin an Assessment
+              <svg
+                width="16"
+                height="10"
+                viewBox="0 0 16 10"
+                fill="none"
+                aria-hidden="true"
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              >
+                <path
+                  d="M0.5 5H15M15 5L11 1M15 5L11 9"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+          </div>
+
+          {/* desktop — unchanged */}
+          <div className="hidden md:block">
+            <Eyebrow>Independent Jewellery Authentication · Consultation</Eyebrow>
+            <h1 className="mt-8 font-display text-7xl leading-[1.05] tracking-tight">
+              Expertise.
+              <br />
+              Integrity.
+              <br />
+              Reliability.
+            </h1>
+            <div className="mt-10">
+              <Button>Begin an Assessment</Button>
+            </div>
           </div>
         </div>
       </section>
