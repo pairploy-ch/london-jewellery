@@ -113,12 +113,12 @@ export const ASSESSMENT_FEATURES = [
 
 /* assessment fee — single source of truth for both the UI and the
    server-side PaymentIntent. Amount is in the currency's smallest unit
-   (cents for EUR). Adjust here to change the price. */
+   (pence for GBP). Adjust here to change the price. */
 export const ASSESSMENT_FEE = {
-  // TEMPORARY test price — revert to amount: 6500, label: "€65" after testing.
-  amount: 100, // €1.00 — EUR is charged in cents, so 1 euro = 100
-  currency: "eur",
-  label: "€1",
+  // TEMPORARY test price — revert to amount: 6500, label: "£65" after testing.
+  amount: 100, // £1.00 — GBP is charged in pence, so 1 pound = 100
+  currency: "gbp",
+  label: "£1",
 };
 
 /* steps shown in the assessment flow progress indicator */
