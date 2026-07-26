@@ -28,7 +28,7 @@ export default function Home() {
             </h1>
             <span className="mt-10 block h-px w-16 bg-cream/40" />
             <p className="mt-6 max-w-[20rem] font-sans uppercase tracking-[0.32em] text-[14px] font-thin leading-[2] text-cream">
-              Independent Jewellery Authentication
+              Independent Jewellery Authentication · Consultation
             </p>
             <Link
               href="/begin"
