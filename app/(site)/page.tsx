@@ -19,9 +19,7 @@ export default function Home() {
         <div className="relative mx-auto w-full max-w-6xl px-5 md:px-10">
           {/* mobile — eyebrow first, then headline, then a rule, then a text link */}
           <div className="md:hidden">
-            <p className="max-w-[20rem] font-sans uppercase tracking-[0.32em] text-[14px] font-thin leading-[2] text-cream">
-              Independent Jewellery Authentication · Consultation
-            </p>
+            <Eyebrow>Independent Jewellery Authentication · Consultation</Eyebrow>
             <h1 className="mt-6 font-display text-[32px] leading-[1.3] tracking-[0.4px] text-gold-soft">
               Expertise.
               <br />
@@ -29,10 +27,9 @@ export default function Home() {
               <br />
               Reliability.
             </h1>
-            <span className="mt-10 block h-px w-16 bg-cream/40" />
             <Link
               href="/begin"
-              className="group eyebrow mt-8 inline-flex items-center gap-2 border-b border-cream/50 pb-1 text-cream transition-colors hover:border-gold hover:text-gold"
+              className="group eyebrow mt-10 inline-flex items-center gap-2 border-b border-cream/50 pb-1 text-cream transition-colors hover:border-gold hover:text-gold"
             >
               Begin an Assessment
               <svg
