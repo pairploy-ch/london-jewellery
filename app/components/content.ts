@@ -115,9 +115,10 @@ export const ASSESSMENT_FEATURES = [
    server-side PaymentIntent. Amount is in the currency's smallest unit
    (cents for EUR). Adjust here to change the price. */
 export const ASSESSMENT_FEE = {
-  amount: 6500, // €65.00 — EUR is charged in cents, so 65 euro = 6500
+  // TEMPORARY test price — revert to amount: 6500, label: "€65" after testing.
+  amount: 100, // €1.00 — EUR is charged in cents, so 1 euro = 100
   currency: "eur",
-  label: "€65",
+  label: "€1",
 };
 
 /* steps shown in the assessment flow progress indicator */
