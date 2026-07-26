@@ -17,9 +17,12 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-r from-ink/85 via-ink/45 to-ink/0 bg-ink/0 md:bg-none" />
 
         <div className="relative mx-auto w-full max-w-6xl px-5 md:px-10">
-          {/* mobile — headline first, then a rule, then eyebrow, then a text link */}
+          {/* mobile — eyebrow first, then headline, then a rule, then a text link */}
           <div className="md:hidden">
-            <h1 className="font-display text-[32px] leading-[1.3] tracking-[0.4px] text-gold-soft">
+            <p className="max-w-[20rem] font-sans uppercase tracking-[0.32em] text-[14px] font-thin leading-[2] text-cream">
+              Independent Jewellery Authentication · Consultation
+            </p>
+            <h1 className="mt-6 font-display text-[32px] leading-[1.3] tracking-[0.4px] text-gold-soft">
               Expertise.
               <br />
               Integrity.
@@ -27,9 +30,6 @@ export default function Home() {
               Reliability.
             </h1>
             <span className="mt-10 block h-px w-16 bg-cream/40" />
-            <p className="mt-6 max-w-[20rem] font-sans uppercase tracking-[0.32em] text-[14px] font-thin leading-[2] text-cream">
-              Independent Jewellery Authentication · Consultation
-            </p>
             <Link
               href="/begin"
               className="group eyebrow mt-8 inline-flex items-center gap-2 border-b border-cream/50 pb-1 text-cream transition-colors hover:border-gold hover:text-gold"
