@@ -60,6 +60,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ url: session.url });
   } catch (err) {
     console.error("create-checkout-session failed", err);
-    return NextResponse.json({ error: "checkout_failed" }, { status: 500 });
+    // TEMPORARY: surfaces the real Stripe error to diagnose a production
+    // failure right after the API key was rotated. Revert to a generic
+    // "checkout_failed" once root-caused.
+    const detail = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+    return NextResponse.json({ error: "checkout_failed", detail }, { status: 500 });
   }
 }
