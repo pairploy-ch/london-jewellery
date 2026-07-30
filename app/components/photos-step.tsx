@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { PHOTO_SLOTS } from "./content";
+import { createBrowserClient } from "../lib/supabase/browser";
+import { PHOTO_BUCKET } from "../lib/supabase/config";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB per image
 const MIN_PHOTOS = 5;
@@ -76,6 +78,14 @@ export function PhotosStep({
 
   const count = slots.filter(Boolean).length;
 
+  async function postJson(path: string, body: unknown) {
+    return fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  }
+
   async function handleSubmit() {
     if (count < MIN_PHOTOS) {
       setError(
@@ -86,28 +96,54 @@ export function PhotosStep({
     setSubmitting(true);
     setError(null);
     try {
-      const fd = new FormData();
-      Object.entries(details).forEach(([k, v]) => fd.append(k, v ?? ""));
-      fd.append("paymentIntentId", paymentIntentId);
-      fd.append("submissionId", submissionId);
-      slots.forEach((p, i) => {
-        if (p) {
-          fd.append("photos", p.file);
-          fd.append("photoLabels", PHOTO_SLOTS[i].title);
-        }
+      // 1) verify payment + ensure a submission row exists (JSON only —
+      // no photo bytes go through our own function, so Vercel's ~4.5MB
+      // request body limit never comes into play).
+      const prepareRes = await postJson("/api/submit/prepare", {
+        ...details,
+        paymentIntentId,
+        submissionId,
       });
-
-      const res = await fetch("/api/submit", { method: "POST", body: fd });
-
-      // 503 = backend not configured yet → treat as a preview completion.
-      if (res.status === 503) {
+      if (prepareRes.status === 503) {
         onSubmitted("");
         return;
       }
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.error ?? "submit_failed");
+      const prepareData = await prepareRes.json().catch(() => ({}));
+      if (!prepareRes.ok) throw new Error(prepareData?.error ?? "prepare_failed");
+      const rowId: string = prepareData.id;
 
-      onSubmitted(data?.referenceNumber ?? "");
+      // 2) upload each photo straight to Storage via a signed upload URL.
+      const supabase = createBrowserClient();
+      const photoPaths: string[] = [];
+      for (let i = 0; i < slots.length; i++) {
+        const photo = slots[i];
+        if (!photo) continue;
+        const ext = (photo.file.name.split(".").pop() || "jpg").toLowerCase();
+        const urlRes = await postJson("/api/submit/photo-url", {
+          submissionId: rowId,
+          index: i + 1,
+          ext,
+        });
+        const urlData = await urlRes.json().catch(() => ({}));
+        if (!urlRes.ok) throw new Error(urlData?.error ?? "photo_url_failed");
+
+        const { error: uploadError } = await supabase.storage
+          .from(PHOTO_BUCKET)
+          .uploadToSignedUrl(urlData.path, urlData.token, photo.file);
+        if (uploadError) throw new Error("upload_failed");
+
+        photoPaths.push(urlData.path);
+      }
+
+      // 3) record the uploaded paths against the submission.
+      const finalizeRes = await postJson("/api/submit/finalize", {
+        submissionId: rowId,
+        photoPaths,
+      });
+      const finalizeData = await finalizeRes.json().catch(() => ({}));
+      if (!finalizeRes.ok) throw new Error(finalizeData?.error ?? "finalize_failed");
+
+      onSubmitted(finalizeData?.referenceNumber ?? "");
     } catch {
       setError("Something went wrong submitting your photos. Please try again.");
       setSubmitting(false);
