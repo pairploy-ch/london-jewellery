@@ -20,7 +20,7 @@ export default function Home() {
           {/* mobile — eyebrow first, then headline, then a rule, then a text link */}
           <div className="md:hidden">
             <Eyebrow>Independent Jewellery Authentication · Consultation</Eyebrow>
-            <h1 className="mt-6 font-display text-[32px] leading-[1.3] tracking-[0.4px] text-gold-soft">
+            <h1 className="mt-6 mb-[100px] font-display text-[32px] leading-[1.3] tracking-[0.4px] text-gold-soft">
               Expertise.
               <br />
               Integrity.
