@@ -18,7 +18,7 @@ export default function Home() {
 
         <div className="relative mx-auto w-full max-w-6xl px-5 md:px-10">
           {/* mobile — eyebrow first, then headline, then a rule, then a text link */}
-          <div className="md:hidden">
+          <div className="md:hidden -mt-[100px]">
             <Eyebrow>Independent Jewellery Authentication · Consultation</Eyebrow>
             <h1 className="mt-6 mb-[100px] font-display text-[32px] leading-[1.3] tracking-[0.4px] text-gold-soft">
               Expertise.
