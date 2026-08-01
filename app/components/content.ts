@@ -115,10 +115,9 @@ export const ASSESSMENT_FEATURES = [
    server-side PaymentIntent. Amount is in the currency's smallest unit
    (pence for GBP). Adjust here to change the price. */
 export const ASSESSMENT_FEE = {
-  // TEMPORARY test price — revert to amount: 6500, label: "£65" after testing.
-  amount: 100, // £1.00 — GBP is charged in pence, so 1 pound = 100
+  amount: 6500, // £65.00 — GBP is charged in pence, so 1 pound = 100
   currency: "gbp",
-  label: "£1",
+  label: "£65",
 };
 
 /* steps shown in the assessment flow progress indicator */
