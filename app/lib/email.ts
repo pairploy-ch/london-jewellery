@@ -4,6 +4,10 @@ export function isResendConfigured(): boolean {
   return Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
 }
 
+// Every customer-facing email (payment confirmation, finished report) is
+// always CC'd to the team so nothing gets missed.
+const ADMIN_CC = ["lynnox9@gmail.com", "pairploy.chp@gmail.com"];
+
 type PaymentConfirmationParams = {
   to: string;
   referenceNumber: string;
@@ -109,6 +113,7 @@ export async function sendPaymentConfirmationEmail(
     const { error } = await resend.emails.send({
       from: PAYMENT_CONFIRMATION_FROM,
       to: params.to,
+      cc: ADMIN_CC,
       subject,
       html,
       text,
@@ -203,6 +208,7 @@ export async function sendReportEmail(
     const { error } = await resend.emails.send({
       from: process.env.EMAIL_FROM!,
       to: params.to,
+      cc: ADMIN_CC,
       replyTo: process.env.EMAIL_REPLY_TO || undefined,
       subject,
       html,
