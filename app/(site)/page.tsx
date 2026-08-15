@@ -54,7 +54,7 @@ export default function Home() {
           {/* desktop — same style as mobile: gold-soft headline, text-link CTA */}
           <div className="hidden md:block">
             <Eyebrow>Independent Jewellery Authentication · Consultation</Eyebrow>
-            <h1 className="mt-8 font-display text-7xl leading-[1.05] tracking-tight text-gold-soft">
+            <h1 className="mt-8 font-display text-5xl leading-[1.05] tracking-tight text-gold-soft">
               Expertise.
               <br />
               Integrity.
@@ -63,7 +63,7 @@ export default function Home() {
             </h1>
             <Link
               href="/begin"
-              className="group eyebrow mt-10 inline-flex items-center gap-2 border-b border-cream/50 pb-1 text-cream transition-colors hover:border-gold hover:text-gold"
+              className="group eyebrow mt-24 inline-flex items-center gap-2 border-b border-cream/50 pb-1 text-cream transition-colors hover:border-gold hover:text-gold"
             >
               Begin an Assessment
               <svg
