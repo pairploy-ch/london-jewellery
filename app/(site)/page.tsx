@@ -51,19 +51,38 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* desktop — unchanged */}
+          {/* desktop — same style as mobile: gold-soft headline, text-link CTA */}
           <div className="hidden md:block">
             <Eyebrow>Independent Jewellery Authentication · Consultation</Eyebrow>
-            <h1 className="mt-8 font-display text-7xl leading-[1.05] tracking-tight">
+            <h1 className="mt-8 font-display text-7xl leading-[1.05] tracking-tight text-gold-soft">
               Expertise.
               <br />
               Integrity.
               <br />
               Reliability.
             </h1>
-            <div className="mt-10">
-              <Button>Begin an Assessment</Button>
-            </div>
+            <Link
+              href="/begin"
+              className="group eyebrow mt-10 inline-flex items-center gap-2 border-b border-cream/50 pb-1 text-cream transition-colors hover:border-gold hover:text-gold"
+            >
+              Begin an Assessment
+              <svg
+                width="16"
+                height="10"
+                viewBox="0 0 16 10"
+                fill="none"
+                aria-hidden="true"
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              >
+                <path
+                  d="M0.5 5H15M15 5L11 1M15 5L11 9"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
           </div>
         </div>
       </section>
