@@ -197,7 +197,7 @@ export default function Home() {
       <section id="assessment" className="relative bg-ink-soft text-cream">
         <div className="mx-auto max-w-6xl px-5 py-20 text-center md:px-10 md:py-28">
           <Eyebrow>Get in Touch</Eyebrow>
-          <h2 className="mx-auto mt-6 max-w-2xl font-display text-3xl leading-tight md:text-5xl">
+          <h2 className="mx-auto mt-6 max-w-2xl font-display text-[15px] leading-tight text-gold-soft lg:text-5xl">
             Ready for an independent opinion?
           </h2>
           <p className="mx-auto mt-6 max-w-xl font-serif text-lg text-cream/70 md:text-xl">
